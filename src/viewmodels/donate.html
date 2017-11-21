@@ -9,6 +9,16 @@
           <label>Amount</label> <input type="number" value.bind="amount">
         </div>
       </div>
+      <div class="grouped inline fields">
+        <h3 class="ui dividing header"> Select Method </h3>
+        <div class="field" repeat.for="method of methods">
+          <div class="ui radio checkbox">
+            <input type="radio" model.bind="method" checked.bind="selectedMethod">
+            <label>${method}</label>
+          </div>
+        </div>
+        <label class="ui circular label"> ${selectedMethod} </label>
+      </div>
       <button class="ui blue submit button">Donate</button>
 
     </form>
