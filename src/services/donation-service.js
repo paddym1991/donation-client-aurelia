@@ -1,22 +1,21 @@
+import {inject} from 'aurelia-framework';
+import Fixtures from './fixtures';
+
+@inject(Fixtures)
 export default class DonationService {
 
   donations = [];
-  methods = ['Cash', 'PayPal'];
+  methods = [];
+  candidates = [];
 
-  candidates = [
-    {
-      firstName: 'Lisa',
-      lastName: 'Simpson'
-    },
-    {
-      firstName: 'Bart',
-      lastName: 'Simpson'
-    }
-  ];
-  selectedCandidate = this.candidates[0];
+  constructor(data) {
+    this.donations = data.donations;
+    this.candidates = data.candidates;
+    this.methods = data.methods;
+  }
 
   donate(amount, method, candidate) {
-    let donation = {
+    const donation = {
       amount: amount,
       method: method,
       candidate: candidate
