@@ -22,6 +22,10 @@ Thumbs.db
 
 # Dependencies
 node_modules
+.DS_STORE
+
 
 # Compiled files
-scripts
+scripts/app-bundle.js
+scripts/app-bundle.js.map
+scripts/vendor-bundle.js
