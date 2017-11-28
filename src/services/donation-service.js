@@ -1,6 +1,6 @@
 import {inject} from 'aurelia-framework';
 import Fixtures from './fixtures';
-import {TotalUpdate} from './messages';
+import {TotalUpdate, LoginStatus} from './messages';
 import {EventAggregator} from 'aurelia-event-aggregator';
 
 @inject(Fixtures, EventAggregator)
@@ -9,8 +9,8 @@ export default class DonationService {
   donations = [];
   methods = [];
   candidates = [];
-  total = 0;
   users = [];
+  total = 0;
 
   constructor(data, ea) {
     this.users = data.users;
@@ -43,6 +43,21 @@ export default class DonationService {
     this.candidates.push(candidate);
   }
 
+  register(firstName, lastName, email, password) {
+    const newUser = {
+      firstName: firstName,
+      lastName: lastName,
+      email: email,
+      password: password
+    };
+    this.users[email] = newUser;
+  }
+
+  /**
+   * the login method no longer returns a success object - but publish as equivalent LoginStatus object on the event system
+   * @param email
+   * @param password
+   */
   login(email, password) {
     const status = {
       success: false,
@@ -59,17 +74,17 @@ export default class DonationService {
     } else {
       status.message = 'Unknown user';
     }
-
-    return status;
+    this.ea.publish(new LoginStatus(status));
   }
 
-  register(firstName, lastName, email, password) {
-    const newUser = {
-      firstName: firstName,
-      lastName: lastName,
-      email: email,
-      password: password
+  /**
+   * a new logout method, which also publishes an appropriate event.
+   */
+  logout() {
+    const status = {
+      success: false,
+      message: ''
     };
-    this.users[email] = newUser;
+    this.ea.publish(new LoginStatus(status));
   }
 }
