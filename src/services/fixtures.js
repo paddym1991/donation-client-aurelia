@@ -25,4 +25,19 @@ export default class Fixtures {
       candidate: this.candidates[1]
     }
   ];
+
+  users = {
+    'homer@simpson.com': {
+      firstName: 'Homer',
+      lastName: 'Simpson',
+      email: 'homer@simpson.com',
+      password: 'secret'
+    },
+    'marge@simpson.com': {
+      firstName: 'Marge',
+      lastName: 'Simpson',
+      email: 'marge@simpson.com',
+      password: 'secret'
+    }
+  }
 }
