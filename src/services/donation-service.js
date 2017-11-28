@@ -1,7 +1,9 @@
 import {inject} from 'aurelia-framework';
 import Fixtures from './fixtures';
+import {TotalUpdate} from './messages';
+import {EventAggregator} from 'aurelia-event-aggregator';
 
-@inject(Fixtures)
+@inject(Fixtures, EventAggregator)
 export default class DonationService {
 
   donations = [];
@@ -9,10 +11,11 @@ export default class DonationService {
   candidates = [];
   total = 0;
 
-  constructor(data) {
+  constructor(data, ea) {
     this.donations = data.donations;
     this.candidates = data.candidates;
     this.methods = data.methods;
+    this.ea = ea;
   }
 
   donate(amount, method, candidate) {
@@ -26,6 +29,7 @@ export default class DonationService {
 
     this.total = this.total + parseInt(amount, 10);
     console.log('Total so far ' + this.total);
+    this.ea.publish(new TotalUpdate(this.total));
   }
 
   addCandidate(firstName, lastName, office) {
