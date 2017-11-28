@@ -62,4 +62,14 @@ export default class DonationService {
 
     return status;
   }
+
+  register(firstName, lastName, email, password) {
+    const newUser = {
+      firstName: firstName,
+      lastName: lastName,
+      email: email,
+      password: password
+    };
+    this.users[email] = newUser;
+  }
 }
