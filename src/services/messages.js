@@ -3,3 +3,9 @@ export class TotalUpdate {
     this.total = total;
   }
 }
+
+export class LoginStatus {
+  constructor(status) {
+    this.status = status;
+  }
+}
