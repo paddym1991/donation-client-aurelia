@@ -44,25 +44,6 @@ export default class DonationService {
     });
   }
 
-  addCandidate(firstName, lastName, office) {
-    const candidate = {
-      firstName: firstName,
-      lastName: lastName,
-      office: office
-    };
-    this.candidates.push(candidate);
-  }
-
-  register(firstName, lastName, email, password) {
-    const newUser = {
-      firstName: firstName,
-      lastName: lastName,
-      email: email,
-      password: password
-    };
-    this.users[email] = newUser;
-  }
-
   /**
    * the login method no longer returns a success object - but publish as equivalent LoginStatus object on the event system.
    * authenticate using the retrieved users list.
@@ -118,6 +99,29 @@ export default class DonationService {
   getDonations() {
     this.ac.get('/api/donations').then(res => {
       this.donations = res.content;
+    });
+  }
+
+  addCandidate(firstName, lastName, office) {
+    const candidate = {
+      firstName: firstName,
+      lastName: lastName,
+      office: office
+    };
+    this.ac.post('/api/candidates', candidate).then(res => {
+      this.candidates.push(res.content);
+    });
+  }
+
+  register(firstName, lastName, email, password) {
+    const newUser = {
+      firstName: firstName,
+      lastName: lastName,
+      email: email,
+      password: password
+    };
+    this.ac.post('/api/users', newUser).then(res => {
+      this.getUsers();
     });
   }
 }
