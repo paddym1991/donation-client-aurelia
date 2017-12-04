@@ -31,15 +31,17 @@ export default class DonationService {
   donate(amount, method, candidate) {
     const donation = {
       amount: amount,
-      method: method,
-      candidate: candidate
+      method: method
     };
-    this.donations.push(donation);
-    console.log(amount + ' donated to ' + candidate.firstName + ' ' + candidate.lastName + ': ' + method);
+    this.ac.post('/api/candidates/' + candidate._id + '/donations', donation).then(res => {
+      const returnedDonation = res.content;
+      this.donations.push(returnedDonation);
+      console.log(amount + ' donated to ' + candidate.firstName + ' ' + candidate.lastName + ': ' + method);
 
-    this.total = this.total + parseInt(amount, 10);
-    console.log('Total so far ' + this.total);
-    this.ea.publish(new TotalUpdate(this.total));
+      this.total = this.total + parseInt(amount, 10);
+      console.log('Total so far ' + this.total);
+      this.ea.publish(new TotalUpdate(this.total));
+    });
   }
 
   addCandidate(firstName, lastName, office) {
