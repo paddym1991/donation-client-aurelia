@@ -25,6 +25,7 @@ export default class DonationService {
     this.ac = ac;
     this.getCandidates();
     this.getUsers();
+    this.getDonations();
   }
 
   donate(amount, method, candidate) {
@@ -106,6 +107,15 @@ export default class DonationService {
   getUsers() {
     this.ac.get('/api/users').then(res => {
       this.users = res.content;
+    });
+  }
+
+  /**
+   * These will retrieve the users list from donation-web
+   */
+  getDonations() {
+    this.ac.get('/api/donations').then(res => {
+      this.donations = res.content;
     });
   }
 }
