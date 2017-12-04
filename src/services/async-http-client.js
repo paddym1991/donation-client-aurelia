@@ -2,6 +2,10 @@ import {inject} from 'aurelia-framework';
 import {HttpClient} from 'aurelia-http-client';
 import Fixtures from './fixtures';
 
+/**
+ * This is a new class, which will encapsulate access to the aurelia-http-client we installed in the last step
+ */
+
 @inject(HttpClient, Fixtures)
 export default class AsyncHttpClient {
 
