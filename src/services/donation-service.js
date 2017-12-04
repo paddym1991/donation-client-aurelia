@@ -2,8 +2,9 @@ import {inject} from 'aurelia-framework';
 import Fixtures from './fixtures';
 import {TotalUpdate, LoginStatus} from './messages';
 import {EventAggregator} from 'aurelia-event-aggregator';
+import AsyncHttpClient from './async-http-client';
 
-@inject(Fixtures, EventAggregator)
+@inject(Fixtures, EventAggregator, AsyncHttpClient)
 export default class DonationService {
 
   donations = [];
@@ -12,12 +13,18 @@ export default class DonationService {
   users = [];
   total = 0;
 
-  constructor(data, ea) {
-    this.users = data.users;
-    this.donations = data.donations;
-    this.candidates = data.candidates;
+  /**
+   * First modify the constructor to load the async-client we have just introduced + remove the loading of data from the fixtures
+   * @param data
+   * @param ea
+   * @param ac
+   */
+  constructor(data, ea, ac) {
     this.methods = data.methods;
     this.ea = ea;
+    this.ac = ac;
+    this.getCandidates();
+    this.getUsers();
   }
 
   donate(amount, method, candidate) {
@@ -54,25 +61,21 @@ export default class DonationService {
   }
 
   /**
-   * the login method no longer returns a success object - but publish as equivalent LoginStatus object on the event system
+   * the login method no longer returns a success object - but publish as equivalent LoginStatus object on the event system.
+   * authenticate using the retrieved users list.
    * @param email
    * @param password
    */
   login(email, password) {
     const status = {
       success: false,
-      message: ''
+      message: 'Login Attempt Failed'
     };
-
-    if (this.users[email]) {
-      if (this.users[email].password === password) {
+    for (let user of this.users) {
+      if (user.email === email && user.password === password) {
         status.success = true;
         status.message = 'logged in';
-      } else {
-        status.message = 'Incorrect password';
       }
-    } else {
-      status.message = 'Unknown user';
     }
     this.ea.publish(new LoginStatus(status));
   }
@@ -86,5 +89,23 @@ export default class DonationService {
       message: ''
     };
     this.ea.publish(new LoginStatus(status));
+  }
+
+  /**
+   * This will retrieve the candidates list from donation-web
+   */
+  getCandidates() {
+    this.ac.get('/api/candidates').then(res => {
+      this.candidates = res.content;
+    });
+  }
+
+  /**
+   * These will retrieve the users list from donation-web
+   */
+  getUsers() {
+    this.ac.get('/api/users').then(res => {
+      this.users = res.content;
+    });
   }
 }
