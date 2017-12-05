@@ -32,6 +32,7 @@ export default class AsyncHttpClient {
     this.http.post(url, user).then(response => {
       const status = response.content;
       if (status.success) {
+        localStorage.donation = JSON.stringify(response.content);
         this.http.configure(configuration => {
           configuration.withHeader('Authorization', 'bearer ' + response.content.token);
         });
@@ -50,6 +51,7 @@ export default class AsyncHttpClient {
    * Clear method to accompany the authenticate method
    */
   clearAuthentication() {
+    localStorage.donation = null;
     this.http.configure(configuration => {
       configuration.withHeader('Authorization', '');
     });
