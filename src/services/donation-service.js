@@ -26,6 +26,15 @@ export default class DonationService {
     this.getCandidates();
   }
 
+  /**
+   * accessor for the method in async-http-client
+   * This can enable access to this facility from other components that can only see DonationService
+   * @returns {*|boolean}
+   */
+  isAuthenticated() {
+    return this.ac.isAuthenticated();
+  }
+
   donate(amount, method, candidate) {
     const donation = {
       amount: amount,
