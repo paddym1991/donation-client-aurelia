@@ -18,8 +18,8 @@ export class Home {
     ]);
     this.router = router;
 
-    config.mapUnknownRoutes(instruction => {
-      return 'home';
-    });
+    // config.mapUnknownRoutes(instruction => {
+    //   return 'home';
+    // });
   }
 }
