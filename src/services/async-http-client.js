@@ -20,6 +20,22 @@ export default class AsyncHttpClient {
   }
 
   /**
+   * recover a token (if present), and install it in our default request headers for subsequent api access
+   * @returns {boolean} true if it found a token
+   */
+  isAuthenticated() {
+    let authenticated = false;
+    if (localStorage.donation !== 'null') {
+      authenticated = true;
+      this.http.configure(http => {
+        const auth = JSON.parse(localStorage.donation);
+        http.withHeader('Authorization', 'bearer ' + auth.token);
+      });
+    }
+    return authenticated;
+  }
+
+  /**
    * introduce a new method to authenticate a user to the api.
    * This (invoked in the next step from donation-service),
    * will post to an authenticate url - and if successful,
