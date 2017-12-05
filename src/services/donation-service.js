@@ -24,8 +24,6 @@ export default class DonationService {
     this.ea = ea;
     this.ac = ac;
     this.getCandidates();
-    this.getUsers();
-    this.getDonations();
   }
 
   donate(amount, method, candidate) {
@@ -51,17 +49,11 @@ export default class DonationService {
    * @param password
    */
   login(email, password) {
-    const status = {
-      success: false,
-      message: 'Login Attempt Failed'
+    const user = {
+      email: email,
+      password: password
     };
-    for (let user of this.users) {
-      if (user.email === email && user.password === password) {
-        status.success = true;
-        status.message = 'logged in';
-      }
-    }
-    this.ea.publish(new LoginStatus(status));
+    this.ac.authenticate('/api/users/authenticate', user);
   }
 
   /**
@@ -72,8 +64,10 @@ export default class DonationService {
       success: false,
       message: ''
     };
-    this.ea.publish(new LoginStatus(status));
+    this.ac.clearAuthentication();
+
   }
+
 
   /**
    * This will retrieve the candidates list from donation-web
